@@ -17,7 +17,7 @@ export default {
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   // Not sure about tslib. See: https://mariusschulz.com/blog/external-helpers-library-in-typescript
-  external: ["react", "react-dom", "smartcrop", "tslib"],
+  external: ["react", "react-dom", "smartcrop", "tslib"], // bundle `quantize`
   watch: {
     include: "src/**",
   },
