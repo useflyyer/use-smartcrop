@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es5",
+    "module":"es2015",
+    "alwaysStrict": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "declarationDir": "dist/types",
+    "outDir": "dist/lib",
+    "typeRoots": [
+      "node_modules/@types", "types"
+    ],
+  },
+  "include": ["types/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx"]
+}

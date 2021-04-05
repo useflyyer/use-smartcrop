@@ -1,0 +1,89 @@
+{
+  "name": "use-smartcrop",
+  "version": "0.1.0",
+  "description": "React hook for smartcrop.js to content aware image cropping with points of interest and facial recognition.",
+  "keywords": [
+    "flayyer",
+    "react",
+    "react-hook",
+    "image",
+    "cropper",
+    "cropping",
+    "crop",
+    "smartcrop",
+    "smartcrop.js",
+    "typescript"
+  ],
+  "main": "dist/use-smartcrop.es5.js",
+  "module": "dist/use-smartcrop.esm.js",
+  "typings": "dist/use-smartcrop.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "author": "Patricio López Juri <patricio@flayyer.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flayyer/use-smartcrop.git"
+  },
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "rollup -c rollup.config.ts",
+    "prepublishOnly": "yarn run build",
+    "start": "rollup -c rollup.config.ts -w",
+    "lint": "eslint '*/**/*.{js,ts,tsx}'",
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "quantize": "^1.0.2",
+    "smartcrop": "^2.0.3"
+  },
+  "devDependencies": {
+    "@flayyer/eslint-config": "^1.0.6",
+    "@types/jest": "^26.0.22",
+    "@types/react": "^17.0.3",
+    "eslint": "^7.23.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "rollup": "^2.44.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ]
+  },
+  "peerDependencies": {
+    "react": "^17.0.2"
+  }
+}
