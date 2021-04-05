@@ -49,6 +49,9 @@
   "dependencies": {
     "smartcrop": "^2.0.3"
   },
+  "peerDependencies": {
+    "react": ">=16.0.0"
+  },
   "devDependencies": {
     "@flayyer/eslint-config": "^1.0.6",
     "@testing-library/react-hooks": "^5.1.1",
@@ -87,8 +90,5 @@
       "/node_modules/",
       "/test/"
     ]
-  },
-  "peerDependencies": {
-    "react": "^17.0.2"
   }
 }
