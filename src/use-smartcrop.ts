@@ -97,11 +97,33 @@ export enum SmartcropStatus {
   FAILED = -1,
 }
 
+export interface UseSmartcropResult {
+  /**
+   * Final URL, use this as `<img src={src} />`
+   */
+  src: string | undefined;
+  /**
+   * Current operation status
+   */
+  status: SmartcropStatus;
+  /**
+   * Error object if `status` is `FAILED` (`-1`).
+   */
+  error: Error | undefined;
+  /**
+   * Get the color palette of the images in the selected area.
+   * If no area is set then the whole image is analyzed.
+   *
+   * The returned value is an array of colors which each color is an array of numbers representing `rgba`.
+   */
+  getPalette: (opts?: GetPaletteOptions) => number[][];
+}
+
 /**
  * Crop and image given a position and size in pixels. The final images will have the desired dimension.
  * @see https://github.com/jwagner/smartcrop.js
  */
-export function useSmartcrop(src: string | undefined | null, options: CropOptions) {
+export function useSmartcrop(src: string | undefined | null, options: CropOptions): UseSmartcropResult {
   const { width, height, minScale, boost = [], ruleOfThirds, debug } = options;
   const [srcProcessed, srcProcessedSet] = useState<string>();
   const [status, setStatus] = useState(SmartcropStatus.LOADING);
@@ -161,12 +183,6 @@ export function useSmartcrop(src: string | undefined | null, options: CropOption
     };
   }, deps);
 
-  /**
-   * Get the color palette of the images in the selected area.
-   * If no area is set then the whole image is analyzed.
-   *
-   * The returned value is an array of colors which each color is an array of numbers representing `rgba`.
-   */
   function getPalette(opts: GetPaletteOptions = {}) {
     if (!context) return [];
     const x = opts.x || 0;
