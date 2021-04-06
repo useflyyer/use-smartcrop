@@ -3,27 +3,91 @@ import React, { useEffect, useState } from "react";
 import quantize from "quantize";
 import smartcrop from "smartcrop";
 
+/**
+ * Describes a region to boost. A usage example of this is to take into account faces in the image.
+ */
 export interface CropBoost {
+  /**
+   * Pixels from the left side.
+   */
   x: number;
+  /**
+   * Pixels from the top.
+   */
   y: number;
+  /**
+   * In pixels.
+   */
   width: number;
+  /**
+   * In pixels.
+   */
   height: number;
+  /**
+   * In the range `[0, 1]`
+   */
   weight: number;
 }
+
+/**
+ * Arguments for `smartcrop.js`
+ * @see https://github.com/jwagner/smartcrop.js
+ */
 export interface CropOptions {
+  /**
+   * Minimal scale of the crop rect, set to `1.0` to prevent smaller than necessary crops (lowers the risk of chopping things off).
+   */
   minScale?: number;
+  /**
+   * Width of the crop you want to use.
+   */
   width: number;
+  /**
+   *  Height of the crop you want to use.
+   */
   height: number;
+  /**
+   * Optional array of regions whose 'interestingness' you want to boost
+   */
   boost?: CropBoost[];
+  /**
+   * Optional boolean if set to `false` it will turn off the rule of thirds composition weight
+   */
   ruleOfThirds?: boolean;
   debug?: boolean;
 }
+
+/**
+ * Extracted from `lokesh/color-thief`.
+ * @see https://github.com/lokesh/color-thief
+ */
 export interface GetPaletteOptions {
+  /**
+   * Pixels from the left side of the cropped image.
+   * @default 0
+   */
   x?: number | null;
+  /**
+   * Pixels from the top of the cropped image.
+   * @default 0
+   */
   y?: number | null;
+  /**
+   * In pixels of the cropped image. Defaults to full width.
+   */
   width?: number | null;
+  /**
+   * In pixels of the cropped image. Defaults to full height.
+   */
   height?: number | null;
+  /**
+   * How many colors as output.
+   * @default 5
+   */
   size?: number | null;
+  /**
+   * @default 10
+   */
   quality?: number | null;
 }
 
@@ -33,6 +97,10 @@ export enum SmartcropStatus {
   FAILED = -1,
 }
 
+/**
+ * Crop and image given a position and size in pixels. The final images will have the desired dimension.
+ * @see https://github.com/jwagner/smartcrop.js
+ */
 export function useSmartcrop(src: string | undefined | null, options: CropOptions) {
   const { width, height, minScale, boost = [], ruleOfThirds, debug } = options;
   const [srcProcessed, srcProcessedSet] = useState<string>();
@@ -93,6 +161,12 @@ export function useSmartcrop(src: string | undefined | null, options: CropOption
     };
   }, deps);
 
+  /**
+   * Get the color palette of the images in the selected area.
+   * If no area is set then the whole image is analyzed.
+   *
+   * The returned value is an array of colors which each color is an array of numbers representing `rgba`.
+   */
   function getPalette(opts: GetPaletteOptions = {}) {
     if (!context) return [];
     const x = opts.x || 0;
