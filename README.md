@@ -22,18 +22,19 @@ import { useSmartcrop, SmartcropStatus } from "use-smartcrop";
 
 function App() {
   const src = "https://images.pexels.com/photos/1496286/pexels-photo-1496286.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
-  const image = useSmartcrop(src, { width: 200, height: 400, minScale: 1.0 });
+  const cropped = useSmartcrop(src, { width: 200, height: 400, minScale: 1.0 });
 
-  const status = image.status // 0 = LOADING, 1 = LOADED, -1 = FAILED
+  const status = cropped.status // 0 = LOADING, 1 = LOADED, -1 = FAILED
   if (status === SmartcropStatus.FAILED) {
-    const error = image.error; // `Error` if status is FAILED
+    const error = cropped.error; // `Error` if status is FAILED
+    console.error(error);
   }
 
-  const paletteWholeImage = image.getPalette();
-  const paletteSection = image.getPalette({ x: 10, y: 20, width: 50, height: 50 });
+  const paletteWholeImage = cropped.getPalette();
+  const paletteSection = cropped.getPalette({ x: 10, y: 20, width: 50, height: 50 });
 
   return (
-    <img src={image.src} crossOrigin="" />
+    <img src={cropped.src} crossOrigin="" />
   );
 }
 ```

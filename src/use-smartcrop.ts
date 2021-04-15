@@ -107,9 +107,9 @@ export interface UseSmartcropResult {
    */
   status: SmartcropStatus;
   /**
-   * Error object if `status` is `FAILED` (`-1`).
+   * ErrorEvent or Error object if `status` is `FAILED` (`-1`).
    */
-  error: Error | undefined;
+  error: Error | ErrorEvent | undefined;
   /**
    * Get the color palette of the images in the selected area.
    * If no area is set then the whole image is analyzed.
@@ -123,12 +123,15 @@ export interface UseSmartcropResult {
  * Crop and image given a position and size in pixels. The final images will have the desired dimension.
  * @see https://github.com/jwagner/smartcrop.js
  */
-export function useSmartcrop(src: string | undefined | null, options: CropOptions): UseSmartcropResult {
+export function useSmartcrop(
+  src: string | undefined | null | React.ComponentProps<"img">,
+  options: CropOptions,
+): UseSmartcropResult {
   const { width, height, minScale, boost = [], ruleOfThirds, debug } = options;
   const [srcProcessed, srcProcessedSet] = useState<string>();
   const [status, setStatus] = useState(SmartcropStatus.LOADING);
   const [context, setContext] = useState<CanvasRenderingContext2D>();
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | ErrorEvent>();
 
   const serialized = boost.map((b) => JSON.stringify(b));
   const deps = ([] as any[]).concat(src, width, height, minScale, ruleOfThirds, debug, serialized);
@@ -163,15 +166,19 @@ export function useSmartcrop(src: string | undefined | null, options: CropOption
     };
 
     function onerror(ev: ErrorEvent) {
-      console.error(ev);
+      setError(ev.error);
       setStatus(SmartcropStatus.FAILED);
     }
 
     const img = new Image();
     img.addEventListener("load", handleLoad as any);
     img.addEventListener("error", onerror);
-    img.crossOrigin = "";
-    img.src = src;
+    if (typeof src === "object") {
+      Object.assign(img, src);
+    } else {
+      // img.crossOrigin = "";
+      img.src = src;
+    }
 
     return function cleanup() {
       setContext(undefined);
