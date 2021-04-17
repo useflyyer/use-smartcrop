@@ -14,6 +14,8 @@ Install this dependency:
 yarn add use-smartcrop
 ```
 
+By default images are loading with `crossOrigin=""` prop. [See this StackOverflow thread](https://stackoverflow.com/questions/22097747/how-to-fix-getimagedata-error-the-canvas-has-been-tainted-by-cross-origin-data).
+
 Common case usage:
 
 ```tsx
@@ -37,4 +39,16 @@ function App() {
     <img src={cropped.src} crossOrigin="" />
   );
 }
+```
+
+Using custom props (`React.ComponentProps<"img">`) for the underlying `img` used to load the image.
+
+```tsx
+// Typescript example
+
+const imgProps = { src, crossOrigin: "" } as const // ⛔️ Will trigger infinite renders.
+const cropped = useSmartcrop(imgProps, { width: 200, height: 400, minScale: 1.0 });
+
+const imgProps = useMemo(() => ({ src, crossOrigin: "" }) as const, [src]); // ✅ good!
+const cropped = useSmartcrop(imgProps, { width: 200, height: 400, minScale: 1.0 });
 ```

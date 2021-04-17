@@ -176,7 +176,7 @@ export function useSmartcrop(
     if (typeof src === "object") {
       Object.assign(img, src);
     } else {
-      // img.crossOrigin = "";
+      img.crossOrigin = ""; // Use in conjunction with @flayyer/proxy
       img.src = src;
     }
 
