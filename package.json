@@ -1,6 +1,6 @@
 {
   "name": "use-smartcrop",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "React hook for smartcrop.js to content aware image cropping with points of interest and facial recognition.",
   "keywords": [
     "flayyer",
