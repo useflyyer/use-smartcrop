@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import quantize from "quantize";
 import smartcrop from "smartcrop";
 
+import { GetPaletteOptions } from "./use-palette";
+import { CREATE_PIXEL_ARRAY } from "./utils";
+
 /**
  * Describes a region to boost. A usage example of this is to take into account faces in the image.
  */
@@ -55,40 +58,6 @@ export interface CropOptions {
    */
   ruleOfThirds?: boolean;
   debug?: boolean;
-}
-
-/**
- * Extracted from `lokesh/color-thief`.
- * @see https://github.com/lokesh/color-thief
- */
-export interface GetPaletteOptions {
-  /**
-   * Pixels from the left side of the cropped image.
-   * @default 0
-   */
-  x?: number | null;
-  /**
-   * Pixels from the top of the cropped image.
-   * @default 0
-   */
-  y?: number | null;
-  /**
-   * In pixels of the cropped image. Defaults to full width.
-   */
-  width?: number | null;
-  /**
-   * In pixels of the cropped image. Defaults to full height.
-   */
-  height?: number | null;
-  /**
-   * How many colors as output.
-   * @default 5
-   */
-  size?: number | null;
-  /**
-   * @default 10
-   */
-  quality?: number | null;
 }
 
 export enum SmartcropStatus {
@@ -200,7 +169,7 @@ export function useSmartcrop(
     const size = opts.size || 5;
     const imageData = context.getImageData(x, y, w, h);
     const pixelCount = w * h;
-    const pixelArray = createPixelArray(imageData.data, pixelCount, quality);
+    const pixelArray = CREATE_PIXEL_ARRAY(imageData.data, pixelCount, quality);
     // Send array to quantize function which clusters values
     // using median cut algorithm
     const cmap = quantize(pixelArray, size);
@@ -209,26 +178,4 @@ export function useSmartcrop(
   }
 
   return { src: srcProcessed, status, error, getPalette };
-}
-
-function createPixelArray(imgData: Uint8ClampedArray, pixelCount: number, quality: number): number[][] {
-  const pixels = imgData;
-  const pixelArray = [];
-
-  for (let i = 0, offset, r, g, b, a; i < pixelCount; i = i + quality) {
-    offset = i * 4;
-    r = pixels[offset + 0];
-    g = pixels[offset + 1];
-    b = pixels[offset + 2];
-    a = pixels[offset + 3];
-
-    // If pixel is mostly opaque and not white
-    if (typeof a === "undefined" || a >= 125) {
-      // @ts-ignore
-      if (!(r > 250 && g > 250 && b > 250)) {
-        pixelArray.push([r, g, b]);
-      }
-    }
-  }
-  return pixelArray as number[][];
 }
