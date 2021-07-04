@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, ReactEventHandler } from "react";
 
 import { ONLOAD_TO_CANVAS, IS_IMG_LOADED, IMAGE_TO_CANVAS } from "./utils";
 
-export function useImageCanvas(src: string | null | undefined, crossOrigin: HTMLImageElement["crossOrigin"] = "") {
-  const [error, setError] = useState<Error | ErrorEvent | null>(null);
+export function useImageCanvas(image: Partial<HTMLImageElement> | null | undefined = {}) {
+  const [error, setError] = useState<Error | null>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+
+  const {
+    src,
+    crossOrigin = "",
+    decoding,
+    loading,
+    referrerPolicy,
+    ...attributes // TODO
+  } = image || {};
 
   useEffect(() => {
     if (!src) return;
-    const handleLoad: React.ReactEventHandler<HTMLImageElement> = (ev) => {
+    const handleLoad: ReactEventHandler<HTMLImageElement> = (ev) => {
       try {
         const instance = ONLOAD_TO_CANVAS(ev);
         setCanvas(instance);
@@ -19,12 +28,16 @@ export function useImageCanvas(src: string | null | undefined, crossOrigin: HTML
       }
     };
     function onerror(ev: ErrorEvent) {
-      setError(ev.error);
+      // @ts-expect-error TODO: parse or create Error
+      setError(ev);
     }
 
     const current = new Image();
     current.crossOrigin = crossOrigin; // Use in conjunction with @flayyer/proxy
     current.src = src;
+    current.decoding = decoding || current.decoding;
+    current.loading = loading || current.loading;
+    current.referrerPolicy = referrerPolicy || current.referrerPolicy;
 
     if (IS_IMG_LOADED(current)) {
       try {

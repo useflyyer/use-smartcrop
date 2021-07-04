@@ -38,6 +38,16 @@ export interface GetPaletteOptions {
   quality?: number | null;
 }
 
+/**
+ * Returns empty array if the only color is white.
+ * @example
+ * <img
+      ref={logoRef}
+      src={proxy(logo)}
+      crossOrigin="" // Important to prevent "tainted canvas" errors
+      className={clsx('h-full w-auto object-contain')}
+    />
+ */
 export function usePalette(
   canvas: HTMLCanvasElement | null | undefined,
   opts: GetPaletteOptions = {},
