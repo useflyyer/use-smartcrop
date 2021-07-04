@@ -2,9 +2,11 @@ export { useImageAsCanvas } from "./use-image-as-canvas";
 export { useImageCanvas } from "./use-image-canvas";
 export { usePalette, GetPaletteOptions } from "./use-palette";
 export {
+  smartcropResult,
+  cropCanvas,
   useSmartcrop,
   useCroppedCanvas,
-  useSmartCropResult,
+  useSmartcropResult,
   CropScore,
   Crop,
   CropResult,

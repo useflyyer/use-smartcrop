@@ -12,7 +12,32 @@ import { useStable } from "./use-stable";
 
 export type UseSmartcropResult = AsyncState<CropResult | null>;
 
-export function useSmartCropResult(
+export function smartcropResult(source: HTMLCanvasElement, options: CropOptions) {
+  const promise = smartcrop.crop(source, options);
+  return promise;
+}
+
+export function cropCanvas(
+  source: HTMLCanvasElement,
+  result: CropResult,
+  options: Pick<CropOptions, "width" | "height">,
+) {
+  const scale = 1;
+  const canvas = document.createElement("canvas");
+  canvas.width = ~~(options.width * scale);
+  canvas.height = ~~(options.height * scale);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    return null;
+  }
+  const crop = result.topCrop;
+  // Origin: crop.x, crop.y, crop.width, crop.height
+  // Destiny: 0, 0, canvas.width, canvas.height
+  ctx.drawImage(source, crop.x, crop.y, crop.width, crop.height, 0, 0, canvas.width, canvas.height);
+  return canvas;
+}
+
+export function useSmartcropResult(
   source: HTMLCanvasElement | null | undefined,
   options: CropOptions,
 ): UseSmartcropResult {
@@ -21,7 +46,7 @@ export function useSmartCropResult(
     if (!source || !optionsStable) {
       return Promise.resolve(null);
     }
-    const promise = smartcrop.crop(source, optionsStable);
+    const promise = smartcropResult(source, optionsStable);
     return promise;
   }, [source, optionsStable]);
   return state;
@@ -40,19 +65,7 @@ export function useCroppedCanvas(
   }
 
   if (!dequal(resultRef.current, result)) {
-    const scale = 1;
-    const canvas = document.createElement("canvas");
-    canvas.width = ~~(options.width * scale);
-    canvas.height = ~~(options.height * scale);
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return null;
-    }
-    const crop = result.topCrop;
-    // Origin: crop.x, crop.y, crop.width, crop.height
-    // Destiny: 0, 0, canvas.width, canvas.height
-    ctx.drawImage(source, crop.x, crop.y, crop.width, crop.height, 0, 0, canvas.width, canvas.height);
-    canvasRef.current = canvas;
+    canvasRef.current = cropCanvas(source, result, options);
   }
   return canvasRef.current;
 }
@@ -66,7 +79,7 @@ export function useSmartcrop(
   options: CropOptions,
 ): [string | null, Error | null] {
   const [source, error] = useImageCanvas(image);
-  const result = useSmartCropResult(source, options);
+  const result = useSmartcropResult(source, options);
   const canvas = useCroppedCanvas(source, result.value, options);
   const src = useMemo(() => (canvas ? canvas.toDataURL() : null), [canvas]);
   return [src, error || result.error || null];
