@@ -62,7 +62,7 @@ export function useImageCanvas(image: Partial<HTMLImageElement> | null | undefin
         current.removeEventListener("error", onerror);
       } catch (err) {}
     };
-  }, [src, crossOrigin]);
+  }, [src, crossOrigin, decoding, loading, referrerPolicy]);
 
   return [canvas, error] as const;
 }

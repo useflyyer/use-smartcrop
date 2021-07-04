@@ -1,8 +1,8 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
-import { dequal } from "dequal";
-import { useAsync } from "react-use";
-import { AsyncState } from "react-use/lib/useAsyncFn";
+import { dequal } from "dequal/lite";
+import { useAsyncFn } from "react-use";
+import type { AsyncState } from "react-use/lib/useAsyncFn";
 import smartcrop, { CropOptions, CropResult } from "smartcrop";
 
 export { CropScore, Crop, CropResult, CropBoost, CropOptions } from "smartcrop";
@@ -12,12 +12,12 @@ import { useStable } from "./use-stable";
 
 export type UseSmartcropResult = AsyncState<CropResult | null>;
 
-export function smartcropResult(source: HTMLCanvasElement, options: CropOptions) {
+export function SMARTCROP_RESULT(source: HTMLCanvasElement, options: CropOptions) {
   const promise = smartcrop.crop(source, options);
   return promise;
 }
 
-export function cropCanvas(
+export function CROP_CANVAS(
   source: HTMLCanvasElement,
   result: CropResult,
   options: Pick<CropOptions, "width" | "height">,
@@ -42,13 +42,25 @@ export function useSmartcropResult(
   options: CropOptions,
 ): UseSmartcropResult {
   const optionsStable = useStable(options);
-  const state = useAsync(() => {
-    if (!source || !optionsStable) {
+
+  const [state, callback] = useAsyncFn(
+    () => {
+      if (source && optionsStable) {
+        const promise = SMARTCROP_RESULT(source, optionsStable);
+        return promise;
+      }
       return Promise.resolve(null);
+    },
+    [source, optionsStable],
+    { loading: Boolean(source) }, // initial value, doesn't matter if changes
+  );
+
+  useEffect(() => {
+    if (source && optionsStable) {
+      callback();
     }
-    const promise = smartcropResult(source, optionsStable);
-    return promise;
-  }, [source, optionsStable]);
+  }, [callback, source, optionsStable]);
+
   return state;
 }
 
@@ -65,7 +77,8 @@ export function useCroppedCanvas(
   }
 
   if (!dequal(resultRef.current, result)) {
-    canvasRef.current = cropCanvas(source, result, options);
+    canvasRef.current = CROP_CANVAS(source, result, options);
+    resultRef.current = result;
   }
   return canvasRef.current;
 }
