@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { ComponentProps, useEffect, useMemo, useRef } from "react";
 
 import { dequal } from "dequal/lite";
 import { useAsyncFn } from "react-use";
@@ -88,7 +88,7 @@ export function useCroppedCanvas(
  * @see https://github.com/jwagner/smartcrop.js
  */
 export function useSmartcrop(
-  image: Partial<HTMLImageElement> | null | undefined,
+  image: ComponentProps<"img"> | null | undefined,
   options: CropOptions,
 ): [string | null, Error | null] {
   const [source, error] = useImageCanvas(image);

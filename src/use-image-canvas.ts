@@ -1,8 +1,8 @@
-import { useEffect, useState, ReactEventHandler } from "react";
+import { ComponentProps, useEffect, useState, ReactEventHandler } from "react";
 
 import { ONLOAD_TO_CANVAS, IS_IMG_LOADED, IMAGE_TO_CANVAS } from "./utils";
 
-export function useImageCanvas(image: Partial<HTMLImageElement> | null | undefined = {}) {
+export function useImageCanvas(image: ComponentProps<"img"> | null | undefined = {}) {
   const [error, setError] = useState<Error | null>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -35,9 +35,9 @@ export function useImageCanvas(image: Partial<HTMLImageElement> | null | undefin
     const current = new Image();
     current.crossOrigin = crossOrigin; // Use in conjunction with @flayyer/proxy
     current.src = src;
-    current.decoding = decoding || current.decoding;
-    current.loading = loading || current.loading;
-    current.referrerPolicy = referrerPolicy || current.referrerPolicy;
+    if (decoding) current.decoding = decoding;
+    if (loading) current.loading = loading;
+    if (referrerPolicy) current.referrerPolicy = referrerPolicy;
 
     if (IS_IMG_LOADED(current)) {
       try {
