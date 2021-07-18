@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, ReactEventHandler } from "react";
 
 import { ONLOAD_TO_CANVAS, IS_IMG_LOADED, IMAGE_TO_CANVAS } from "./utils";
 
@@ -8,7 +8,7 @@ export function useImageAsCanvas(current: HTMLImageElement | undefined | null) {
 
   useEffect(() => {
     if (!current) return;
-    const handleLoad: React.ReactEventHandler<HTMLImageElement> = (ev) => {
+    const handleLoad: ReactEventHandler<HTMLImageElement> = (ev) => {
       try {
         const instance = ONLOAD_TO_CANVAS(ev);
         setCanvas(instance);

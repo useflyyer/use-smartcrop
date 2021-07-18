@@ -1,3 +1,4 @@
+// @ts-ignore
 import { renderHook } from "@testing-library/react-hooks";
 
 import { useSmartcrop } from "../src/use-smartcrop";
