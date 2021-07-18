@@ -3,12 +3,14 @@ import { ComponentProps, useEffect, useMemo, useRef } from "react";
 import { dequal } from "dequal/lite";
 import { useAsyncFn } from "react-use";
 import type { AsyncState } from "react-use/lib/useAsyncFn";
-import smartcrop, { CropOptions, CropResult } from "smartcrop";
+// @ts-expect-error Types
+import smartcrop from "smartcrop";
 
-export { CropScore, Crop, CropResult, CropBoost, CropOptions } from "smartcrop";
-
+import { CropResult, CropOptions } from "./temporal";
 import { useImageCanvas } from "./use-image-canvas";
 import { useStable } from "./use-stable";
+
+export { CropScore, Crop, CropResult, CropBoost, CropOptions } from "./temporal";
 
 export type UseSmartcropResult = AsyncState<CropResult | null>;
 
@@ -61,7 +63,7 @@ export function useSmartcropResult(
     }
   }, [callback, source, optionsStable]);
 
-  return state;
+  return state as any;
 }
 
 export function useCroppedCanvas(
