@@ -1,5 +1,5 @@
 export { useImageAsCanvas } from "./use-image-as-canvas";
-export { useImageCanvas } from "./use-image-canvas";
+export { useImageCanvas, IMAGE_SRC_TO_CANVAS } from "./use-image-canvas";
 export { usePalette, GetPaletteOptions } from "./use-palette";
 export {
   SMARTCROP_RESULT,
@@ -14,4 +14,4 @@ export {
   CropOptions,
   UseSmartcropResult,
 } from "./use-smartcrop";
-export { IMAGE_TO_CANVAS, IS_IMG_LOADED, HEX_TO_RGB, RGB_TO_HEX, CREATE_PIXEL_ARRAY } from "./utils";
+export { IMAGE_TO_CANVAS, HEX_TO_RGB, RGB_TO_HEX } from "./utils";

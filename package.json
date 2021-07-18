@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.4",
   "description": "React hook for smartcrop.js to content aware image cropping with points of interest and facial recognition.",
   "keywords": [
-    "flayyer",
+    "flyyer",
     "react",
     "react-hook",
     "image",
@@ -14,27 +14,29 @@
     "smartcrop.js",
     "typescript"
   ],
-  "main": "dist/index.es5.js",
-  "module": "dist/index.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/useflyyer/use-smartcrop.git"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
-  "author": "Patricio López Juri <patricio@flayyer.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/flayyer/use-smartcrop.git"
+  "engines": {
+    "node": ">=10"
   },
-  "license": "MIT",
-  "private": false,
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "rollup -c rollup.config.ts",
-    "prepublishOnly": "yarn run build",
-    "start": "rollup -c rollup.config.ts -w",
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
-    "test": "jest"
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
   },
   "husky": {
     "hooks": {
@@ -46,51 +48,46 @@
       "eslint --fix"
     ]
   },
+  "author": "Patricio López Juri",
+  "module": "dist/use-smartcrop.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/use-smartcrop.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/use-smartcrop.esm.js",
+      "limit": "10 KB"
+    }
+  ],
   "dependencies": {
     "dequal": "^2.0.2",
     "react-use": "^17.2.4",
     "smartcrop": "^2.0.3"
   },
   "peerDependencies": {
-    "react": ">=16.0.0"
+    "react": ">=16"
   },
   "devDependencies": {
-    "@flayyer/eslint-config": "^1.1.3",
-    "@testing-library/react-hooks": "^5.1.2",
-    "@types/jest": "^26.0.23",
-    "@types/react": "^17.0.13",
-    "eslint": "^7.30.0",
+    "@babel/core": "^7.14.6",
+    "@flyyer/eslint-config": "^2.0.1",
+    "@size-limit/preset-small-lib": "^5.0.1",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
+    "babel-loader": "^8.2.2",
+    "eslint": "^7.31.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3",
-    "jest": "^27.0.6",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^11.0.1",
     "prettier": "^2.3.2",
-    "quantize": "github:lokesh/quantize",
     "react": "^17.0.2",
-    "react-test-renderer": "^17.0.2",
-    "rollup": "^2.52.7",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "ts-jest": "^27.0.3",
-    "ts-node": "^10.0.0",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "size-limit": "^5.0.1",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.0",
     "typescript": "^4.3.5"
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/"
-    ]
   }
 }

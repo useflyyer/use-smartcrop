@@ -12,6 +12,7 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
     decoding,
     loading,
     referrerPolicy,
+    // @ts-expect-error Unused var
     ...attributes // TODO
   } = image || {};
 
@@ -33,9 +34,10 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
     }
 
     const current = new Image();
-    current.crossOrigin = crossOrigin; // Use in conjunction with @flayyer/proxy
+    current.crossOrigin = crossOrigin; // Use in conjunction with @flyyer/proxy
     current.src = src;
     if (decoding) current.decoding = decoding;
+    // @ts-ignore
     if (loading) current.loading = loading;
     if (referrerPolicy) current.referrerPolicy = referrerPolicy;
 
@@ -65,4 +67,49 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
   }, [src, crossOrigin, decoding, loading, referrerPolicy]);
 
   return [canvas, error] as const;
+}
+
+export async function IMAGE_SRC_TO_CANVAS(image: ComponentProps<"img">): Promise<HTMLCanvasElement> {
+  return new Promise<HTMLCanvasElement>((resolve, reject) => {
+    const {
+      src,
+      crossOrigin = "",
+      decoding,
+      loading,
+      referrerPolicy,
+      // @ts-expect-error Unused var
+      ...attributes // TODO
+    } = image || {};
+
+    const current = new Image();
+    current.crossOrigin = crossOrigin; // Use in conjunction with @flyyer/proxy
+    current.src = src!;
+    if (decoding) current.decoding = decoding;
+    // @ts-ignore
+    if (loading) current.loading = loading;
+    if (referrerPolicy) current.referrerPolicy = referrerPolicy;
+
+    const handleLoad: ReactEventHandler<HTMLImageElement> = (ev) => {
+      try {
+        const instance = ONLOAD_TO_CANVAS(ev);
+        resolve(instance);
+      } catch (err) {
+        reject(err);
+      } finally {
+        try {
+          current.removeEventListener("load", handleLoad as any);
+        } catch (err) {}
+        try {
+          current.removeEventListener("error", onerror);
+        } catch (err) {}
+      }
+    };
+    function onerror(ev: ErrorEvent) {
+      // TODO: parse or create Error
+      reject(ev);
+    }
+
+    current.addEventListener("load", handleLoad as any);
+    current.addEventListener("error", onerror);
+  });
 }

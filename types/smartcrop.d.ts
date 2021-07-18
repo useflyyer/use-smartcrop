@@ -73,6 +73,7 @@ declare module "smartcrop" {
   }
 
   export const smartcrop: {
+    // eslint-disable-next-line no-undef
     crop(image: CanvasImageSource, options: CropOptions): Promise<CropResult>;
   };
   export default smartcrop;

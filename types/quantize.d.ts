@@ -1,4 +1,4 @@
-declare module "quantize" {
+declare module "./quantize" {
   interface CMap {
     palette(): [number, number, number, number?][];
   }

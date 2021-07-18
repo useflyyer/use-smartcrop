@@ -1,7 +1,6 @@
 import { DependencyList, useMemo } from "react";
 
-import quantize from "quantize";
-
+import quantize from "./quantize";
 import { CREATE_PIXEL_ARRAY } from "./utils";
 
 /**

@@ -84,7 +84,9 @@ export function useCroppedCanvas(
 }
 
 /**
- * Crop and image given a position and size in pixels. The final images will have the desired dimension.
+ * Crop and image given a position and size in pixels.
+ * The final images will have the desired dimension.
+ * Returns `[string, Error?]` where the string is a DataURL you can use as `<img src={dataURL} />`.
  * @see https://github.com/jwagner/smartcrop.js
  */
 export function useSmartcrop(
