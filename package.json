@@ -1,6 +1,6 @@
 {
   "name": "use-smartcrop",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "React hook for smartcrop.js to content aware image cropping with points of interest and facial recognition.",
   "keywords": [
     "flyyer",
