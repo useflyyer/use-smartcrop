@@ -13,7 +13,7 @@ export function useImageAsCanvas(current: HTMLImageElement | undefined | null) {
         const instance = ONLOAD_TO_CANVAS(ev);
         setCanvas(instance);
         setError(null);
-      } catch (err) {
+      } catch (err: any) {
         setCanvas(null);
         setError(err);
       }
@@ -27,7 +27,7 @@ export function useImageAsCanvas(current: HTMLImageElement | undefined | null) {
         const instance = IMAGE_TO_CANVAS(current);
         setCanvas(instance);
         setError(null);
-      } catch (err) {
+      } catch (err: any) {
         setCanvas(null);
         setError(err);
       }
@@ -40,10 +40,10 @@ export function useImageAsCanvas(current: HTMLImageElement | undefined | null) {
       setError(null);
       try {
         current.removeEventListener("load", handleLoad as any);
-      } catch (err) {}
+      } catch (err: any) {}
       try {
         current.removeEventListener("error", onerror);
-      } catch (err) {}
+      } catch (err: any) {}
     };
   }, [current]);
 

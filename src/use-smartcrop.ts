@@ -3,7 +3,6 @@ import { ComponentProps, useEffect, useMemo, useRef } from "react";
 import { dequal } from "dequal/lite";
 import { useAsyncFn } from "react-use";
 import type { AsyncState } from "react-use/lib/useAsyncFn";
-// @ts-expect-error Types
 import smartcrop from "smartcrop";
 
 import { CropResult, CropOptions } from "./temporal";

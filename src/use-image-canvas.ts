@@ -23,7 +23,7 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
         const instance = ONLOAD_TO_CANVAS(ev);
         setCanvas(instance);
         setError(null);
-      } catch (err) {
+      } catch (err: any) {
         setCanvas(null);
         setError(err);
       }
@@ -46,7 +46,7 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
         const instance = IMAGE_TO_CANVAS(current);
         setCanvas(instance);
         setError(null);
-      } catch (err) {
+      } catch (err: any) {
         setCanvas(null);
         setError(err);
       }
@@ -59,10 +59,10 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
       setError(null);
       try {
         current.removeEventListener("load", handleLoad as any);
-      } catch (err) {}
+      } catch (err: any) {}
       try {
         current.removeEventListener("error", onerror);
-      } catch (err) {}
+      } catch (err: any) {}
     };
   }, [src, crossOrigin, decoding, loading, referrerPolicy]);
 
@@ -93,15 +93,15 @@ export async function IMAGE_SRC_TO_CANVAS(image: ComponentProps<"img">): Promise
       try {
         const instance = ONLOAD_TO_CANVAS(ev);
         resolve(instance);
-      } catch (err) {
+      } catch (err: any) {
         reject(err);
       } finally {
         try {
           current.removeEventListener("load", handleLoad as any);
-        } catch (err) {}
+        } catch (err: any) {}
         try {
           current.removeEventListener("error", onerror);
-        } catch (err) {}
+        } catch (err: any) {}
       }
     };
     function onerror(ev: ErrorEvent) {
