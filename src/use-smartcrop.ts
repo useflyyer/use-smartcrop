@@ -1,8 +1,7 @@
 import { ComponentProps, useEffect, useMemo, useRef } from "react";
 
 import { dequal } from "dequal/lite";
-import { useAsyncFn } from "react-use";
-import type { AsyncState } from "react-use/lib/useAsyncFn";
+import useAsyncFn, { AsyncState } from "react-use/lib/useAsyncFn";
 import smartcrop from "smartcrop";
 
 import { CropResult, CropOptions } from "./temporal";

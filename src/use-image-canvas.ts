@@ -69,7 +69,7 @@ export function useImageCanvas(image: ComponentProps<"img"> | null | undefined =
   return [canvas, error] as const;
 }
 
-export async function IMAGE_SRC_TO_CANVAS(image: ComponentProps<"img">): Promise<HTMLCanvasElement> {
+export function IMAGE_SRC_TO_CANVAS(image: ComponentProps<"img">): Promise<HTMLCanvasElement> {
   return new Promise<HTMLCanvasElement>((resolve, reject) => {
     const {
       src,
